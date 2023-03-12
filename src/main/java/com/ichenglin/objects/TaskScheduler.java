@@ -3,9 +3,7 @@ package com.ichenglin.objects;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.ichenglin.states.TaskKeyState;
-import com.ichenglin.tasks.Task;
-import com.ichenglin.tasks.TaskAwait;
-import com.ichenglin.tasks.TaskKey;
+import com.ichenglin.tasks.*;
 
 public class TaskScheduler {
 
@@ -21,9 +19,12 @@ public class TaskScheduler {
         JsonObject task_instructions = this.task_list.get(task_index).getAsJsonObject();
         Task       task_object       = null;
         switch (task_instructions.get("type").getAsString()) {
-            case "key_press"   -> task_object = new TaskKey(task_instructions.get("keys").getAsJsonArray(), TaskKeyState.KEY_PRESS);
-            case "key_release" -> task_object = new TaskKey(task_instructions.get("keys").getAsJsonArray(), TaskKeyState.KEY_RELEASE);
-            case "await"       -> task_object = new TaskAwait(task_instructions.get("duration").getAsInt());
+            case "key_press"     -> task_object = new TaskKeyPress(task_instructions.get("keys").getAsJsonArray(), TaskKeyState.KEY_PRESS);
+            case "key_release"   -> task_object = new TaskKeyPress(task_instructions.get("keys").getAsJsonArray(), TaskKeyState.KEY_RELEASE);
+            case "mouse_press"   -> task_object = new TaskMousePress(task_instructions.get("keys").getAsJsonArray(), TaskKeyState.KEY_PRESS);
+            case "mouse_release" -> task_object = new TaskMousePress(task_instructions.get("keys").getAsJsonArray(), TaskKeyState.KEY_RELEASE);
+            case "mouse_move"    -> task_object = new TaskMouseMove(task_instructions.get("destination").getAsJsonObject());
+            case "await"         -> task_object = new TaskAwait(task_instructions.get("duration").getAsInt());
         }
         assert task_object != null;
         TaskLogger.log_send("Performing " + task_object);
