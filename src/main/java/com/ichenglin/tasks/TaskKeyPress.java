@@ -6,6 +6,8 @@ import com.ichenglin.states.TaskKeyState;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TaskKeyPress implements Task {
 
@@ -16,6 +18,12 @@ public class TaskKeyPress implements Task {
         ArrayList<Integer> task_keys_new = new ArrayList<Integer>();
         for (int key_index = 0; key_index < task_keys.size(); key_index++) {
             String key_string = task_keys.get(key_index).getAsString();
+            Pattern key_string_pattern = Pattern.compile("^VK_(\\d+)$");
+            Matcher key_string_matcher = key_string_pattern.matcher(key_string);
+            if (key_string_matcher.find()) {
+                task_keys_new.add(KeyEvent.getExtendedKeyCodeForChar(Integer.parseInt(key_string_matcher.group(1))));
+                continue;
+            }
             task_keys_new.add(KeyEvent.getExtendedKeyCodeForChar(key_string.charAt(0)));
         }
         this.task_keys  = task_keys_new;

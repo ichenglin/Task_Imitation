@@ -25,9 +25,11 @@ public class Main {
         TaskLogger.log_send("KeyTask instance startup. (" + PATH_EXECUTE.toAbsolutePath() + ")");
         TaskConfiguration configuration_file   = new TaskConfiguration(PATH_EXECUTE.resolve("pattern.json"));
         JsonElement       configuration_object = configuration_file.configuration_get();
-        TaskScheduler     task_scheduler       = new TaskScheduler(configuration_object.getAsJsonArray());
-        for (int i = 0; i < configuration_object.getAsJsonArray().size(); i++) {
-            task_scheduler.perform_next();
+        while (true) {
+            TaskScheduler     task_scheduler       = new TaskScheduler(configuration_object.getAsJsonArray());
+            for (int i = 0; i < configuration_object.getAsJsonArray().size(); i++) {
+                task_scheduler.perform_next();
+            }
         }
     }
 }
